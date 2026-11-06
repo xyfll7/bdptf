@@ -10,16 +10,21 @@ import {
   resetDesign,
   writeDesign,
 } from './lib/store.mjs';
-import { renderSvg, THEMES, SHAPES } from './lib/render.mjs';
-import { renderStudioHtml } from './assets/page.mjs';
+import { renderSvg, THEMES, SHAPES } from '../../../docs/lib/render.js';
+import { assetPaths, renderStudioHtml } from './assets/page.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const MAX_BODY = 16 * 1024;
+const MAX_BODY = 64 * 1024;
 const ID_PATTERN = '^[a-z0-9][a-z0-9._-]{0,63}$';
 
+const ASSETS = assetPaths();
+
 const STATIC = new Map([
-  ['/client.js', { file: 'assets/client.js', type: 'text/javascript; charset=utf-8' }],
-  ['/render.mjs', { file: 'lib/render.mjs', type: 'text/javascript; charset=utf-8' }],
+  ['/client.js', { file: path.join(HERE, 'assets', 'client.js'), type: 'text/javascript; charset=utf-8' }],
+  ['/style.css', { file: ASSETS.style, type: 'text/css; charset=utf-8' }],
+  ['/lib/studio.js', { file: ASSETS.studio, type: 'text/javascript; charset=utf-8' }],
+  ['/lib/render.js', { file: ASSETS.render, type: 'text/javascript; charset=utf-8' }],
+  ['/lib/design.js', { file: ASSETS.design, type: 'text/javascript; charset=utf-8' }],
 ]);
 
 const instances = new Map();
@@ -128,7 +133,7 @@ async function serveStatic(pathname, res) {
     sendText(res, 404, 'Not found', 'text/plain; charset=utf-8');
     return;
   }
-  const body = await fs.readFile(path.join(HERE, entry.file), 'utf8');
+  const body = await fs.readFile(entry.file, 'utf8');
   sendText(res, 200, body, entry.type);
 }
 
@@ -150,9 +155,10 @@ function startServer(designId) {
     const task = isApi
       ? handleApi(req, res, url, designId)
       : isPage
-        ? readDesign(designId).then((state) =>
-            sendText(res, 200, renderStudioHtml(state), 'text/html; charset=utf-8'),
-          )
+        ? readDesign(designId).then(async (state) => {
+            const html = await renderStudioHtml(state);
+            sendText(res, 200, html, 'text/html; charset=utf-8');
+          })
         : serveStatic(url.pathname, res);
 
     task.catch((err) => {

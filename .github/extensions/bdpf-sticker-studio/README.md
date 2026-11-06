@@ -1,18 +1,27 @@
-# 鼻窦排涕法 · 车贴设计台
+# 鼻窦排涕法 · 车贴设计台（Canvas 扩展）
 
-工作区级 Copilot Canvas 扩展：设计、预览并导出「鼻窦排涕法」车贴。
+工作区级 Copilot Canvas 扩展：在设计台里预览「鼻窦排涕法」车贴并保存方案。
 
-## 结构
+## 与在线版的关系
+
+渲染器、数据模型与界面逻辑都来自 [`docs/lib/`](../../../docs/lib)，两边是同一份代码：
+
+| 文件 | 作用 |
+| --- | --- |
+| [`docs/lib/render.js`](../../../docs/lib/render.js) | 纯 SVG 渲染器（3 配色 × 4 版型） |
+| [`docs/lib/design.js`](../../../docs/lib/design.js) | 设计数据模型、校验、默认值 |
+| [`docs/lib/studio.js`](../../../docs/lib/studio.js) | 界面与交互（存储适配器注入） |
+
+本扩展只多做两件事：把存储换成文件系统，并把页面资源挂到本地 HTTP 服务上。
+改渲染逻辑请改 `docs/lib/`，不要在扩展里再写一份。
 
 ```
 .github/extensions/bdpf-sticker-studio/
-├── extension.mjs      # Canvas 声明（open / actions / onClose）与本地 HTTP 服务
-├── lib/
-│   ├── render.mjs     # 纯 SVG 渲染器（无副作用，可单测）
-│   └── store.mjs      # 设计读写：原子写入 + 格式/版本校验
+├── extension.mjs      # Canvas 声明（open / actions / onClose）与 HTTP 服务
+├── lib/store.mjs      # 文件存储：原子写入、按 id 串行化、格式/版本校验
 └── assets/
-    ├── page.mjs       # 设计台页面 HTML
-    └── client.js      # 前端交互（切换、自动保存、导出）
+    ├── page.mjs       # 复用 docs/index.html 并注入已保存的设计
+    └── client.js      # 把保存动作接到 /api/design
 ```
 
 ## Canvas 接口
@@ -43,14 +52,10 @@
 ~/.copilot/extension-data/bdpf-sticker-studio/designs/<designId>.json
 ```
 
-文件带 `format` 与 `version` 标记；无法识别或损坏的数据会报错而不是被覆盖。
+同一 `designId` 的写入会串行执行。保存是「读取—合并—写入」，并发请求若不加锁会互相覆盖，
+把刚设置的配色或版型改回旧值。
 
-## 验证
+## 限制
 
-```bash
-node --check extension.mjs
-node --check lib/render.mjs
-node --check lib/store.mjs
-node --check assets/page.mjs
-node --check assets/client.js
-```
+本扩展依赖 `@github/copilot-sdk`（由 Copilot 运行时注入）和一个本地 HTTP 服务，
+因此**不能**作为 GitHub Pages 站点运行。要网页版请用 [`docs/`](../../../docs)。

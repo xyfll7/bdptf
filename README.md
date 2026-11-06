@@ -2,6 +2,15 @@
 
 共 **42** 篇，按抖音发布顺序排列。全部为纯 Markdown，可直接在线阅读。
 
+> 🚗 **车贴设计台**：在线设计「鼻窦排涕法」车贴（3 种配色 × 4 种版型），支持导出 SVG / PNG。
+>
+> ```bash
+> python3 -m http.server 8000 --directory docs
+> ```
+>
+> 然后打开 <http://127.0.0.1:8000/>。推送到 `main` 后也会自动发布到 GitHub Pages，
+> 详见 [docs/README.md](./docs/README.md)。
+
 <table>
   <thead>
     <tr>
