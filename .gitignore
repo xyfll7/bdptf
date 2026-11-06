@@ -1,2 +1,5 @@
 .DS_Store
 Thumbs.db
+
+# 车贴设计台：送印/发图产物（由 Canvas 内导出）
+/stickers-export/
