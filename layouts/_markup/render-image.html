@@ -1,0 +1,27 @@
+{{- /*
+  覆盖 PaperMod 的 render-image：
+  文章里的图片写成站内根路径（/images/26/01.jpeg），这里补上 baseURL 的子路径，
+  这样本地预览、GitHub Pages 子目录部署都能正确加载。
+*/ -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $src := $u.String -}}
+{{- if not $u.IsAbs -}}
+  {{- if hasPrefix $u.Path "/" -}}
+    {{- $src = $u.Path | strings.TrimPrefix "/" | relURL -}}
+  {{- else -}}
+    {{- $path := strings.TrimPrefix "./" $u.Path -}}
+    {{- with or (.PageInner.Resources.Get $path) (resources.Get $path) -}}
+      {{- $src = .RelPermalink -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $u.RawQuery }}{{ $src = printf "%s?%s" $src . }}{{ end -}}
+  {{- with $u.Fragment }}{{ $src = printf "%s#%s" $src . }}{{ end -}}
+{{- end -}}
+{{- $attributes := merge .Attributes (dict "alt" .Text "src" $src "title" (.Title | transform.HTMLEscape) "loading" "lazy") -}}
+<img
+  {{- range $k, $v := $attributes -}}
+    {{- if $v -}}
+      {{- printf " %s=%q" $k $v | safeHTMLAttr -}}
+    {{- end -}}
+  {{- end -}}>
+{{- /**/ -}}

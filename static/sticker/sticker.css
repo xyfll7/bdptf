@@ -1,0 +1,421 @@
+/*
+ * 鼻窦排涕法 · 车贴设计台
+ *
+ * 这份样式被两个宿主共用：
+ *   1. Hugo 博客内的 /sticker/ 页面（layouts/page/sticker.html）
+ *   2. Canvas 扩展服务的独立页 static/sticker/studio.html
+ * 所有规则都限定在 .studio 作用域内，不会污染 PaperMod 主题的正文样式。
+ */
+
+.studio {
+  --studio-bg: #0e0d0c;
+  --studio-panel: #171513;
+  --studio-line: #2b2724;
+  --studio-ink: #f3ece1;
+  --studio-dim: #a79c8d;
+  --studio-hot: #e0473a;
+  --studio-gold: #f2c14e;
+  --studio-ok: #5ec26a;
+
+  display: grid;
+  grid-template-columns: 336px minmax(0, 1fr);
+  min-height: min(760px, 78vh);
+  margin: 8px 0 24px;
+  border: 1px solid var(--studio-line);
+  border-radius: 20px;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 700px at 12% -10%, #241a15 0%, transparent 62%),
+    var(--studio-bg);
+  color: var(--studio-ink);
+  font: 14px/1.6 "PingFang SC", "Hiragino Sans GB", "Noto Sans SC",
+    "Microsoft YaHei", system-ui, sans-serif;
+  text-align: left;
+}
+
+.studio *,
+.studio *::before,
+.studio *::after {
+  box-sizing: border-box;
+}
+
+/* ---------- 左侧控制面板 ---------- */
+
+.studio .panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px 20px 20px;
+  border-right: 1px solid var(--studio-line);
+  background: rgba(18, 16, 15, 0.72);
+  overflow-y: auto;
+  max-height: min(860px, 86vh);
+}
+
+.studio .brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.studio .brand h2 {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.3;
+  letter-spacing: 0.5px;
+  color: var(--studio-ink);
+  border: 0;
+  padding: 0;
+}
+
+.studio .brand small {
+  color: var(--studio-dim);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+}
+
+.studio fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.studio legend {
+  margin-bottom: 2px;
+  padding: 0;
+  color: var(--studio-dim);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+
+.studio .themes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.studio .theme {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 6px;
+  border: 1px solid var(--studio-line);
+  border-radius: 12px;
+  background: #141110;
+  color: var(--studio-dim);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.studio .theme:hover {
+  border-color: #453c35;
+}
+
+.studio .theme[aria-pressed="true"] {
+  border-color: var(--studio-gold);
+  color: var(--studio-ink);
+  box-shadow: inset 0 0 0 1px var(--studio-gold);
+}
+
+.studio .theme .chip {
+  width: 100%;
+  height: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 7px;
+}
+
+.studio .shapes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.studio .shape {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 2px;
+  border: 1px solid var(--studio-line);
+  border-radius: 12px;
+  background: #141110;
+  color: var(--studio-dim);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.studio .shape:hover {
+  border-color: #453c35;
+}
+
+.studio .shape[aria-pressed="true"] {
+  border-color: var(--studio-gold);
+  color: var(--studio-ink);
+  box-shadow: inset 0 0 0 1px var(--studio-gold);
+}
+
+.studio .shape i {
+  display: block;
+  border: 2px solid currentColor;
+  opacity: 0.85;
+}
+
+.studio .shape i.r {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+
+.studio .shape i.b {
+  width: 26px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.studio .shape i.c {
+  width: 20px;
+  height: 16px;
+  border-radius: 6px;
+}
+
+.studio .shape i.p {
+  width: 14px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.studio label.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--studio-dim);
+  font-size: 12px;
+}
+
+.studio input[type="text"],
+.studio textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--studio-line);
+  border-radius: 10px;
+  background: #100e0d;
+  color: var(--studio-ink);
+  font: inherit;
+  font-size: 13px;
+  resize: vertical;
+}
+
+.studio input[type="text"]:focus,
+.studio textarea:focus,
+.studio button:focus-visible,
+.studio .theme:focus-visible,
+.studio .shape:focus-visible {
+  outline: 2px solid var(--studio-gold);
+  outline-offset: 2px;
+}
+
+.studio .toggle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--studio-ink);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.studio .toggle input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--studio-gold);
+}
+
+.studio .hint {
+  margin: 0;
+  color: var(--studio-dim);
+  font-size: 11.5px;
+}
+
+.studio .actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: auto;
+}
+
+.studio .actions .wide {
+  grid-column: 1 / -1;
+}
+
+.studio button {
+  padding: 9px 12px;
+  border: 1px solid var(--studio-line);
+  border-radius: 10px;
+  background: #1d1917;
+  color: var(--studio-ink);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.15s ease, filter 0.15s ease;
+}
+
+.studio button:hover {
+  border-color: #4a413a;
+}
+
+.studio button.ghost {
+  background: transparent;
+}
+
+/* ---------- 右侧预览区 ---------- */
+
+.studio .stage {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 26px 32px 20px;
+  min-width: 0;
+}
+
+.studio .stage-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.studio .stage-head h3 {
+  margin: 0;
+  color: var(--studio-ink);
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border: 0;
+  padding: 0;
+}
+
+.studio .stage-head span {
+  color: var(--studio-dim);
+  font-size: 12px;
+}
+
+.studio .viewport {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+}
+
+.studio .mount {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: min(76vmin, 720px);
+  margin: 0 auto;
+  padding: 18px;
+  border: 1px solid var(--studio-line);
+  border-radius: 20px;
+  background: repeating-conic-gradient(#100f0e 0% 25%, #161413 0% 50%) 50% / 26px 26px;
+}
+
+.studio .mount svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.55));
+}
+
+.studio .stage-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  color: var(--studio-dim);
+  font-size: 12px;
+}
+
+.studio #status {
+  min-height: 1.6em;
+}
+
+.studio #status[data-tone="ok"] {
+  color: var(--studio-ok);
+}
+
+.studio #status[data-tone="err"] {
+  color: var(--studio-hot);
+}
+
+.studio .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- 窄屏：预览置顶，控件下移 ---------- */
+
+@media (max-width: 900px) {
+  .studio {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .studio .stage {
+    order: -1;
+    grid-template-rows: auto auto auto;
+    gap: 10px;
+    padding: 16px 14px 6px;
+  }
+
+  .studio .stage-foot {
+    order: 3;
+  }
+
+  .studio .panel {
+    gap: 14px;
+    padding: 16px 14px 24px;
+    border-right: 0;
+    border-top: 1px solid var(--studio-line);
+    max-height: none;
+  }
+
+  .studio .mount {
+    max-width: min(72vw, 440px);
+    padding: 12px;
+  }
+
+  .studio .actions {
+    margin-top: 0;
+  }
+
+  .studio .hint {
+    display: none;
+  }
+
+  .studio .stage-head h3 {
+    font-size: 14px;
+  }
+
+  .studio #status {
+    font-size: 11.5px;
+  }
+}

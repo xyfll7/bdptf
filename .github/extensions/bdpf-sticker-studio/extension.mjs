@@ -10,7 +10,7 @@ import {
   resetDesign,
   writeDesign,
 } from './lib/store.mjs';
-import { renderSvg, THEMES, SHAPES } from '../../../docs/lib/render.js';
+import { renderSvg, THEMES, SHAPES } from '../../../static/sticker/lib/render.js';
 import { assetPaths, renderStudioHtml } from './assets/page.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));

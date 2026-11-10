@@ -1,0 +1,97 @@
+{{ define "main" }}
+{{- /* 车贴样式表放在 static/ 下，与独立页 studio.html 共用同一份。 */ -}}
+<link rel="stylesheet" href="{{ "sticker/sticker.css" | relURL }}">
+<style>
+  /* 车贴设计台需要横向空间，单独放宽本页的主栏宽度。 */
+  body:has(.studio) .main {
+    max-width: calc(1180px + var(--gap) * 2);
+  }
+  body:has(.studio) .post-single,
+  body:has(.studio) .post-header,
+  body:has(.studio) .post-footer {
+    max-width: none;
+  }
+  /* 正文导语保持可读宽度。 */
+  body:has(.studio) .post-content {
+    max-width: 72ch;
+  }
+  body:has(.studio) .studio {
+    max-width: none;
+  }
+</style>
+
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title entry-hint-parent">{{ .Title }}</h1>
+    {{- with .Description }}
+    <div class="post-description">{{ . }}</div>
+    {{- end }}
+  </header>
+
+  <div class="post-content md-content">
+    {{ .Content }}
+  </div>
+
+  <div class="studio">
+    <aside class="panel">
+      <div class="brand">
+        <h2>车贴设计台</h2>
+        <small>CAR&nbsp;STICKER</small>
+      </div>
+
+      <fieldset>
+        <legend>配色</legend>
+        <div class="themes" id="themes" role="group" aria-label="配色方案"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>版型</legend>
+        <div class="shapes" id="shapes" role="group" aria-label="版型"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>文案</legend>
+        <label class="field">主标语（放大）
+          <input type="text" id="title" maxlength="40" autocomplete="off"/>
+        </label>
+        <label class="field">副标语
+          <textarea id="subtitle" rows="2" maxlength="80"></textarea>
+        </label>
+        <label class="toggle"><input type="checkbox" id="cutline"/>显示刻字/裁切线</label>
+      </fieldset>
+
+      <p class="hint">主标语建议 6–9 字，副标语 12–30 字，放大会更醒目。改动自动保存在本机浏览器。</p>
+
+      <div class="actions">
+        <button id="download" type="button">下载 SVG</button>
+        <button id="png" type="button">下载 PNG</button>
+        <button id="download-all" type="button" class="wide">打包下载全部 12 款</button>
+        <button id="reset" type="button" class="ghost wide">恢复默认</button>
+      </div>
+    </aside>
+
+    <main class="stage">
+      <div class="stage-head">
+        <h3>预览</h3>
+        <span id="meta"></span>
+      </div>
+      <div class="viewport">
+        <div class="mount" id="preview" aria-live="polite" aria-busy="false"></div>
+      </div>
+      <footer class="stage-foot">
+        <span id="status" role="status" aria-live="polite"></span>
+        <span>矢量导出 · 可直接送印</span>
+      </footer>
+    </main>
+  </div>
+
+  <footer class="post-footer">
+    <p class="post-description">
+      车贴由本站纯 SVG 渲染器生成，导出即可送印。也可以直接分享带参数的设计链接，
+      例如 <code>?theme=pop&amp;shape=banner&amp;title=鼻窦排涕法，万岁！</code>。
+    </p>
+  </footer>
+</article>
+
+<script type="module" src="{{ "sticker/lib/app.js" | relURL }}"></script>
+{{ end }}

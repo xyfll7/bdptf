@@ -1,10 +1,17 @@
-name: Deploy stickers site to GitHub Pages
+name: Deploy blog to GitHub Pages
 
 on:
   push:
     branches: [main]
     paths:
-      - 'docs/**'
+      - 'content/**'
+      - 'layouts/**'
+      - 'static/**'
+      - 'themes/**'
+      - 'hugo.yaml'
+      - 'scripts/**'
+      - 'articles/**'
+      - 'images/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -17,37 +24,44 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          submodules: false
 
-      - name: Verify site assets exist
-        run: |
-          test -f docs/index.html
-          test -f docs/style.css
-          test -f docs/lib/app.js
-          test -f docs/lib/render.js
-          test -f docs/lib/studio.js
-          test -f docs/lib/design.js
-
-      - name: Syntax check site modules
-        run: |
-          node --check docs/lib/app.js
-          node --check docs/lib/render.js
-          node --check docs/lib/design.js
-          node --check docs/lib/studio.js
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          # PaperMod 要求 >= 0.158.0。
+          hugo-version: '0.169.0'
 
       - uses: actions/configure-pages@v5
+        id: pages
+
+      - name: Check sticker modules
+        run: |
+          for f in static/sticker/lib/app.js static/sticker/lib/studio.js \
+                   static/sticker/lib/design.js static/sticker/lib/render.js; do
+            test -f "$f" || { echo "缺少 $f"; exit 1; }
+            node --check "$f"
+          done
+
+      - name: Build site
+        run: |
+          hugo --minify --gc \
+            --baseURL "${{ steps.pages.outputs.base_url }}/" \
+            --destination ./public
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: docs
+          path: ./public
 
   deploy:
     needs: build

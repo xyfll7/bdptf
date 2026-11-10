@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>鼻窦排涕法 · 车贴设计台</title>
+<meta name="description" content="在线设计「鼻窦排涕法」车贴：三种配色、四种版型，实时预览，一键导出 SVG / PNG。"/>
+<link rel="stylesheet" href="./sticker.css"/>
+<style>
+  /* 独立页宿主：让设计台铺满视口；博客内则由 .studio 卡片承载。 */
+  html,body{margin:0;min-height:100%;background:#0e0d0c}
+  .studio{min-height:100vh;margin:0;border:0;border-radius:0}
+  .studio .panel{max-height:100vh}
+</style>
+</head>
+<body>
+<div class="studio">
+  <aside class="panel">
+    <div class="brand">
+      <h2>鼻窦排涕法 · 车贴设计台</h2>
+      <small>CAR&nbsp;STICKER</small>
+    </div>
+
+    <fieldset>
+      <legend>配色</legend>
+      <div class="themes" id="themes" role="group" aria-label="配色方案"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>版型</legend>
+      <div class="shapes" id="shapes" role="group" aria-label="版型"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>文案</legend>
+      <label class="field">主标语（放大）
+        <input type="text" id="title" maxlength="40" autocomplete="off"/>
+      </label>
+      <label class="field">副标语
+        <textarea id="subtitle" rows="2" maxlength="80"></textarea>
+      </label>
+      <label class="toggle"><input type="checkbox" id="cutline"/>显示刻字/裁切线</label>
+    </fieldset>
+
+    <p class="hint">主标语建议 6–9 字，副标语 12–30 字，放大会更醒目。改动自动保存在本机浏览器。</p>
+
+    <div class="actions">
+      <button id="download" type="button">下载 SVG</button>
+      <button id="png" type="button">下载 PNG</button>
+      <button id="download-all" type="button" class="wide">打包下载全部 12 款</button>
+      <button id="reset" type="button" class="ghost wide">恢复默认</button>
+    </div>
+  </aside>
+
+  <main class="stage">
+    <div class="stage-head">
+      <h3>预览</h3>
+      <span id="meta"></span>
+    </div>
+    <div class="viewport">
+      <div class="mount" id="preview" aria-live="polite" aria-busy="false"></div>
+    </div>
+    <footer class="stage-foot">
+      <span id="status" role="status" aria-live="polite"></span>
+      <span>矢量导出 · 可直接送印</span>
+    </footer>
+  </main>
+</div>
+
+<script type="module" src="./lib/app.js"></script>
+</body>
+</html>

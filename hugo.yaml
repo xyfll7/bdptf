@@ -1,0 +1,149 @@
+# 站点基础配置。主题为 Hugo + PaperMod，详见 README.md。
+
+baseURL: "https://xyfll7.github.io/bdptf/"
+title: "鼻窦排涕法"
+theme: "PaperMod"
+
+locale: "zh-CN"
+defaultContentLanguage: "zh"
+hasCJKLanguage: true
+
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+enableEmoji: true
+enableGitInfo: false
+
+pagination:
+  pagerSize: 10
+
+# GitHub Pages 是静态托管，没有后端，关闭不存在的输出更省心。
+disableKinds: []
+removePathAccents: true
+
+taxonomies:
+  category: categories
+  tag: tags
+
+# 顶栏导航。URL 用相对路径，子目录部署时 Hugo 会自动补 baseURL 前缀。
+menu:
+  main:
+    - identifier: posts
+      name: "文章"
+      pageRef: "/posts"
+      weight: 10
+    - identifier: sticker
+      name: "车贴设计台"
+      pageRef: "/sticker"
+      weight: 20
+    - identifier: archives
+      name: "归档"
+      pageRef: "/archives"
+      weight: 30
+    - identifier: categories
+      name: "分类"
+      pageRef: "/categories"
+      weight: 40
+    - identifier: search
+      name: "搜索"
+      pageRef: "/search"
+      weight: 50
+
+markup:
+  goldmark:
+    renderer:
+      # 文章来自抖音笔记，纯 Markdown，无需放开原始 HTML。
+      unsafe: false
+    parser:
+      attribute:
+        block: true
+    extensions:
+      definitionList: true
+      footnote: true
+      linkify: true
+      strikethrough: true
+      table: true
+      taskList: true
+      typographer: true
+  highlight:
+    noClasses: false
+    lineNos: false
+    codeFences: true
+  tableOfContents:
+    startLevel: 2
+    endLevel: 4
+    ordered: false
+
+params:
+  env: production
+  description: "鼻窦排涕法 · 42 篇鼻炎、鼻窦炎与洗鼻实践笔记，附在线车贴设计台。"
+
+  author: "鼻窦排涕法"
+
+  # 中文界面：PaperMod 自带 zh.yaml 语言包。
+  DateFormat: "2006-01-02"
+  defaultTheme: "auto"
+  disableThemeToggle: false
+  disableScrollToTop: false
+  ShowShareButtons: false
+  ShowReadingTime: true
+  ShowWordCount: true
+  ShowCodeCopyButtons: true
+  ShowBreadCrumbs: true
+  ShowPostNavLinks: true
+  ShowToc: false
+  TocOpen: false
+
+  mainSections:
+    - posts
+
+  # 首页顶部简介，比纯列表更像一个博客门面。
+  homeInfoParams:
+    Title: "鼻窦排涕法"
+    Content: >
+      42 篇关于鼻炎、鼻窦炎、洗鼻子与排涕的实践笔记，按发布顺序整理。
+      另外还有一台在线车贴设计台：三种配色 × 四种版型，实时预览，
+      可直接导出 SVG / PNG 送印。
+
+  # 归档页展示全部文章。
+  ShowAllPagesInArchive: true
+
+  footer:
+    hideCopyright: false
+    text: >
+      [车贴设计台](/sticker/) ·
+      [GitHub 仓库](https://github.com/xyfll7/bdptf) ·
+      本站内容仅记录个人实践，不能替代医生的诊断与处方。
+
+  # 搜索页使用主题内置的 Fuse.js 客户端搜索。
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 1
+    keys:
+      - title
+      - permalink
+      - summary
+      - content
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+outputFormats:
+  JSON:
+    mediaType: "application/json"
+    baseName: "index"
+    isPlainText: true
+
+sitemap:
+  changefreq: weekly
+  priority: 0.5
+  filename: sitemap.xml
